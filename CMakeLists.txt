@@ -35,7 +35,7 @@ pico_sdk_init()
 
 # Add executable. Default name is the project name, version 0.1
 
-add_executable(interrupcao interrupcao.c )
+add_executable(interrupcao interrupcao.c biblio.c)
 
 pico_set_program_name(interrupcao "interrupcao")
 pico_set_program_version(interrupcao "0.1")
@@ -46,7 +46,7 @@ pico_enable_stdio_usb(interrupcao 0)
 
 # Add the standard library to the build
 target_link_libraries(interrupcao
-        pico_stdlib)
+        pico_stdlib )
 
 # Add the standard include files to the build
 target_include_directories(interrupcao PRIVATE
@@ -55,12 +55,13 @@ target_include_directories(interrupcao PRIVATE
 
 # Add any user requested libraries
 target_link_libraries(interrupcao 
-    pico
+        pico_stdlib hardware_pio
+    
         
         )
 
 pico_add_extra_outputs(interrupcao)
 
 
-pico_generate_pio_header(ws2812 ${CMAKE_CURRENT_LIST_DIR}/ws2812.pio OUTPUT_DIR ${CMAKE_CURRENT_LIST_DIR}/generated)
-
+pico_generate_pio_header(interrupcao ${CMAKE_CURRENT_LIST_DIR}/ws2812.pio)
+include_directories(${CMAKE_SOURCE_DIR}/include)
