@@ -56,6 +56,7 @@ target_include_directories(interrupcao PRIVATE
 # Add any user requested libraries
 target_link_libraries(interrupcao 
         pico_stdlib hardware_pio
+        hardware_timer
     
         
         )

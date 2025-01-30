@@ -7,10 +7,11 @@
 #define NUM_PIXELS 25
 #define WS2812_PIN 7
 #define tempo 400
+#define c 10
 
 
 // Buffer para armazenar quais LEDs estão ligados matriz 5x5
-bool led_buffer[NUM_PIXELS] = {
+bool led_buffer[0][NUM_PIXELS] = {
     1, 0, 0, 0, 1, 
     0, 0, 0, 0, 0, 
     0, 0, 1, 0, 0, 
