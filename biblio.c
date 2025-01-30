@@ -7,18 +7,95 @@
 #define NUM_PIXELS 25
 #define WS2812_PIN 7
 #define tempo 400
-#define c 10
+#define c 3
 
 
 // Buffer para armazenar quais LEDs estão ligados matriz 5x5
-bool led_buffer[0][NUM_PIXELS] = {
-    1, 0, 0, 0, 1, 
-    0, 0, 0, 0, 0, 
-    0, 0, 1, 0, 0, 
-    0, 0, 0, 0, 0, 
-    1, 0, 0, 0, 1
-};
 
+/*bool led_buffer[0][NUM_PIXELS]={
+    0, 1, 1, 1, 0, 
+    0, 1, 0, 1, 0, 
+    0, 1, 0, 1, 0, 
+    0, 1, 0, 1, 0, 
+    0, 1, 1, 1, 0
+};*/
+/*
+bool led_buffer[1][NUM_PIXELS]={
+    0, 0, 1, 0, 0, 
+    0, 1, 1, 0, 0, 
+    0, 0, 1, 0, 0, 
+    0, 0, 1, 0, 0, 
+    0, 0, 1, 0, 0
+}
+bool led_buffer[2][NUM_PIXELS] = {
+    0, 1, 1, 1, 0, 
+    0, 0, 0, 1, 0, 
+    0, 0, 1, 0, 0, 
+    0, 1, 0, 0, 0, 
+    0, 1, 1, 1, 0
+};*/
+
+bool led_buffer[10][25] = {
+    {0, 1, 1, 1, 0, 
+    0, 1, 0, 1, 0, 
+    0, 1, 0, 1, 0, 
+    0, 1, 0, 1, 0, 
+    0, 1, 1, 1, 0,},
+
+    {0, 0, 1, 0, 0, 
+    0, 0, 1, 0, 0, 
+    0, 0, 1, 0, 0, 
+    0, 0, 1, 0, 0, 
+    0, 0, 1, 0, 0,},
+
+    {0, 1, 1, 1, 0, 
+    0, 1, 0, 0, 0, 
+    0, 1, 1, 1, 0, 
+    0, 0, 0, 1, 0, 
+    0, 1, 1, 1, 0,},
+
+    {0, 1, 1, 1, 0, 
+    0, 0, 0, 1, 0, 
+    0, 1, 1, 1, 0, 
+    0, 0, 0, 1, 0, 
+    0, 1, 1, 1, 0,},
+
+    {0, 1, 0, 0, 0, 
+    0, 0, 0, 1, 0, 
+    0, 1, 1, 1, 0, 
+    0, 1, 0, 1, 0, 
+    0, 1, 0, 1, 0,},
+
+    {0, 1, 1, 1, 0, 
+    0, 0, 0, 1, 0, 
+    0, 1, 1, 1, 0, 
+    0, 1, 0, 0, 0, 
+    0, 1, 1, 1, 0,},
+
+    {0, 1, 1, 1, 0, 
+    0, 1, 0, 1, 0, 
+    0, 1, 1, 1, 0, 
+    0, 1, 0, 0, 0, 
+    0, 1, 1, 1, 0,},
+
+    {0, 1, 0, 0, 0, 
+    0, 0, 0, 1, 0, 
+    0, 1, 0, 0, 0, 
+    0, 0, 0, 1, 0, 
+    0, 1, 1, 1, 0,},
+
+    {0, 1, 1, 1, 0, 
+    0, 1, 0, 1, 0, 
+    0, 1, 1, 1, 0, 
+    0, 1, 0, 1, 0, 
+    0, 1, 1, 1, 0,},
+
+    {0, 1, 1, 1, 0, 
+    0, 0, 0, 1, 0, 
+    0, 1, 1, 1, 0, 
+    0, 1, 0, 1, 0, 
+    0, 1, 1, 1, 0,},
+};
 
 
 
@@ -33,7 +110,7 @@ static inline uint32_t urgb_u32(uint8_t r, uint8_t g, uint8_t b)
 }
 
 
-void set_one_led(uint8_t r, uint8_t g, uint8_t b)
+void set_one_led(uint8_t r, uint8_t g, uint8_t b, int iterador)
 {
     // Define a cor com base nos parâmetros fornecidos
     uint32_t color = urgb_u32(r, g, b);
@@ -41,7 +118,8 @@ void set_one_led(uint8_t r, uint8_t g, uint8_t b)
     // Define todos os LEDs com a cor especificada
     for (int i = 0; i < NUM_PIXELS; i++)
     {
-        if (led_buffer[i])
+
+        if (led_buffer[iterador][i])
         {
             put_pixel(color); // Liga o LED com um no buffer
         }
