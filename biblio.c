@@ -10,30 +10,6 @@
 #define c 3
 
 
-// Buffer para armazenar quais LEDs estão ligados matriz 5x5
-
-/*bool led_buffer[0][NUM_PIXELS]={
-    0, 1, 1, 1, 0, 
-    0, 1, 0, 1, 0, 
-    0, 1, 0, 1, 0, 
-    0, 1, 0, 1, 0, 
-    0, 1, 1, 1, 0
-};*/
-/*
-bool led_buffer[1][NUM_PIXELS]={
-    0, 0, 1, 0, 0, 
-    0, 1, 1, 0, 0, 
-    0, 0, 1, 0, 0, 
-    0, 0, 1, 0, 0, 
-    0, 0, 1, 0, 0
-}
-bool led_buffer[2][NUM_PIXELS] = {
-    0, 1, 1, 1, 0, 
-    0, 0, 0, 1, 0, 
-    0, 0, 1, 0, 0, 
-    0, 1, 0, 0, 0, 
-    0, 1, 1, 1, 0
-};*/
 
 bool led_buffer[10][25] = {
     {0, 1, 1, 1, 0, 

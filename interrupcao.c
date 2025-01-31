@@ -5,12 +5,12 @@
 #include "hardware/timer.h"
 #include "bibliopio.h"
 
-#define IS_RGBW false
-#define NUM_PIXELS 25
+
 #define WS2812_PIN 7
 #define tempo 200
 
-extern bool led_buffer[10][25];
+
+
 
 // Variável global para armazenar a cor (Entre 0 e 255 para intensidade)
 uint8_t led_r = 200; // Intensidade do vermelho
@@ -21,6 +21,8 @@ bool led_on = false;
 
 const uint botao_pinA = 5;
 const uint botao_pinB = 6;
+int iterador = 0;
+static volatile uint a = 1;
 
 bool repeating_timer_callback(struct repeating_timer *t)
 {
@@ -30,38 +32,56 @@ bool repeating_timer_callback(struct repeating_timer *t)
 
     return true;
 }
-
-void display_number(int iterador)
+// Função de interrupção com debouncing
+void gpio_irq_handler(uint gpio, uint32_t events)
 {
+    // Obtém o tempo atual em microssegundos
+    uint32_t current_time = to_us_since_boot(get_absolute_time());
+    static volatile uint32_t last_timeA = 0; // Armazena o tempo do último evento (em microssegundos)
+    static volatile uint32_t last_timeB = 0; // Armazena o tempo do último evento (em microssegundos)
 
-    // Itera sobre cada LED na matriz
-    for (int i = 0; i < NUM_PIXELS; i++)
+
+
+    // Verifica se passou tempo suficiente desde o último evento
+
+    if (gpio == botao_pinA)
     {
-        if (led_buffer[iterador][i] == 1)
-        {
-            set_one_led(led_r, led_g, led_b, iterador); // Liga o LED com a cor definida
-        }
-        else
-        {
-            set_one_led(0, 0, 0, iterador); // Desliga o LED
+        if (current_time - last_timeA > 200000)
+        { // Debouncing de 200ms
+            last_timeA = current_time;
+            printf("A: %d\n", a); // Para controle quando se usa o monitor serial para verificar se há bouncing
+            a++;
+            if (iterador != 9)
+            {
+                iterador = iterador + 1;
+                
+
+                set_one_led(led_r, led_g, led_b, iterador);
+            }
+            else
+            {
+                printf("Ai não meu patrão");
+            }
         }
     }
-}
-
-void desplay_number(int iterador)
-{
-
-    // Itera sobre cada LED na matriz
-    for (int i = 0; i < NUM_PIXELS; i++)
+    else if (gpio == botao_pinB)
     {
-        if (led_buffer[iterador][i] == 1)
+        if (current_time - last_timeB > 200000)
         {
-            set_one_led(led_r, led_g, led_b, iterador); // Liga o LED com a cor definida
+            last_timeB = current_time;
+            printf("A: %d\n", a); // Para controle quando se usa o monitor serial para verificar se há bouncing
+            a++;
+            // Debouncing de 200ms
+            if (iterador != 0)
+            {
+                iterador = iterador - 1;
+                set_one_led(led_r, led_g, led_b, iterador);
+            }
+            else{
+                printf("Ai não meu nobre");
+            }
         }
-        else
-        {
-            set_one_led(0, 0, 0, iterador); // Desliga o LED
-        }
+    
     }
 }
 
@@ -86,51 +106,19 @@ int main()
     gpio_set_dir(botao_pinB, GPIO_IN);
     gpio_pull_up(botao_pinB);
 
-    bool ultimo_estado_botao = true;
-    int iterador = 0;
+    set_one_led(led_r, led_g, led_b, iterador);
+
+    gpio_set_irq_enabled_with_callback(botao_pinA, GPIO_IRQ_EDGE_FALL, true, &gpio_irq_handler);
+    gpio_set_irq_enabled_with_callback(botao_pinB, GPIO_IRQ_EDGE_FALL, true, &gpio_irq_handler);
+    
 
     while (true)
     {
+
         
-        set_one_led( led_r, led_g, led_b, iterador);
-        
-        
-
-        bool estado_atual_botaoA = gpio_get(botao_pinA);
-        bool estado_atual_botaoB = gpio_get(botao_pinB);
-
-        if (estado_atual_botaoA == false && ultimo_estado_botao == true){
-
-            
-            
-
-            if (iterador != 9)
-            {
-                iterador = iterador + 1;
-                //display_number(iterador);
-                set_one_led( led_r, led_g, led_b, iterador);
-            }
-            else
-            {
-                printf("Ai não meu patrão");
-            }
-        }
-        if (estado_atual_botaoB == false && ultimo_estado_botao == true)
-        {
-            
-            if (iterador != 0)
-            {
-                iterador = iterador - 1;
-                set_one_led( led_r, led_g, led_b, iterador);
-            }
-        }
-        
-
-        ultimo_estado_botao = estado_atual_botaoA;
-        ultimo_estado_botao = estado_atual_botaoB;
-        sleep_ms(1000);
-
     }
-    
+
     return 0;
 }
+
+
