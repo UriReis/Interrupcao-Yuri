@@ -41,7 +41,7 @@ pico_set_program_name(interrupcao "interrupcao")
 pico_set_program_version(interrupcao "0.1")
 
 # Modify the below lines to enable/disable output over UART/USB
-pico_enable_stdio_uart(interrupcao 0)
+pico_enable_stdio_uart(interrupcao 1)
 pico_enable_stdio_usb(interrupcao 1)
 
 # Add the standard library to the build

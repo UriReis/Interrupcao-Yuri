@@ -62,7 +62,7 @@ void gpio_irq_handler(uint gpio, uint32_t events)
             }
             else
             {
-                printf("Ai não meu patrão");
+                printf("Ai não meu patrão\n");
             }
         }
     }
@@ -80,7 +80,7 @@ void gpio_irq_handler(uint gpio, uint32_t events)
                 set_one_led(led_r, led_g, led_b, iterador); // Chama da função set_one_led presente na biblioteca biblio
             }
             else{
-                printf("Ai não meu nobre");
+                printf("Ai não meu nobre\n");
             }
         }
     
