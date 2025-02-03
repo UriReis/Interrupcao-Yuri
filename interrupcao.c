@@ -119,7 +119,7 @@ int main()
     while (true)
     {
 
-        
+        sleep_ms(1000);
     }
 
     return 0;
